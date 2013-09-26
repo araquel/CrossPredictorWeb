@@ -1,0 +1,11 @@
+Name,A1,B1,D1,A3,B3,D3,Pin,Spn
+Rf,0,0.4,0.5,0.3,0.5,0.45,0.5,0.5
+VAR1,a,c,a,c,g,c,aa,a
+VAR2,a,u,a,b,b,b,ab,b
+VAR3,b,u,a,b,b,c,ab,a
+VAR4,a,u,d,c,b,c,ab,b
+VAR5,b,u,a,c,b,b,ab,a
+VAR6,a,i,d,b,h,b,ba,b
+VAR7,a,u,a,c,b,b,ab,a
+VAR8,a,c,a,c,b,c,aa,b
+VAR9,b,i,a,b,b,a,aa,a
