@@ -16,11 +16,11 @@ import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.ListSelect;
 import com.vaadin.ui.Notification;
+import com.vaadin.ui.OptionGroup;
 import com.vaadin.ui.TabSheet;
 
 
 public class CrossFormHelper{
-
     private String BSLASH = "\\";
     private String FSLASH = "/";
     public String BASE_PATH=VaadinService.getCurrent().getBaseDirectory().getAbsolutePath().replace(BSLASH, FSLASH);
@@ -271,5 +271,13 @@ public class CrossFormHelper{
 	    String filePath = ConstantValue.BASE_PATH_USERDEFINED+filename;
 	    filePath = filePath.replace(".csv",CrossFormHelper.getTimeStamp()+".csv");
 		return filePath;
+	}
+
+
+	public void resetOptionGroup(OptionGroup OptionGroup) {
+		// TODO Auto-generated method stub
+		OptionGroup.setItemCaption(1, "Specified");
+		OptionGroup.select(0);
+
 	}
 }

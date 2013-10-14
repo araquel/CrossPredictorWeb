@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import org.irri.crosspredictor.handler.SelectedTabCloseHandler;
+import org.irri.crosspredictor.listener.OptionGroupValueChangeListener;
 import org.irri.crosspredictor.listener.PListValueChangeListener;
 import org.irri.crosspredictor.model.CrossFormInputModel;
 import org.irri.crosspreditor.helper.CrossFormHelper;
@@ -106,8 +107,6 @@ public class CrossFormComponent extends VerticalLayout{
 
 	addComponent(parentCrossingLayout);
 	addComponent(generateCrossButtonComponent());
-
-
     }
 
     private Component geneTypeComboBoxComponent(){
@@ -118,7 +117,6 @@ public class CrossFormComponent extends VerticalLayout{
 	crossFormHelper.populateGeneType(comboBoxGeneType);
 
 	comboBoxGeneType.addValueChangeListener(new ValueChangeListener() {
-
 	    @Override
 	    public void valueChange(ValueChangeEvent event) {
 		final String valueString = String.valueOf(event.getProperty()
@@ -134,6 +132,8 @@ public class CrossFormComponent extends VerticalLayout{
 		listParent2.removeAllItems();
 		listParent3.removeAllItems();
 
+		crossFormHelper.resetOptionGroup(parentFileOptionGroup);
+		crossFormHelper.resetOptionGroup(estimateSourceOptionGroup);
 	    }
 	});
 
@@ -153,7 +153,6 @@ public class CrossFormComponent extends VerticalLayout{
 	parentFileOptionGroup.setNullSelectionAllowed(false);
 	parentFileOptionGroup.setHtmlContentAllowed(true);
 	parentFileOptionGroup.setImmediate(true);
-
 	layout.addComponent(parentFileOptionGroup);
 	layout.addComponent(parentFileUploadFileComponent());
 
@@ -191,7 +190,8 @@ public class CrossFormComponent extends VerticalLayout{
 				Notification.show("Uploaded file: ", tmpParentFile,
 						Type.TRAY_NOTIFICATION);
 				listParents.removeAllItems();
-//				crossFormHelper.populateParentList(uploadedParentFile, listParents, buttonAdd);
+				buttonAdd.setEnabled(true);
+				crossFormHelper.populateParentList(uploadedParentFile, listParents);
 				parentFileOptionGroup.setItemCaption(1, "Specified: "+tmpParentFile);
 			}
 			else{
@@ -202,9 +202,11 @@ public class CrossFormComponent extends VerticalLayout{
 			}
 		}
 	});
+    uploadParentFile.setEnabled(false);
+	parentFileOptionGroup.addValueChangeListener(new OptionGroupValueChangeListener(parentFileOptionGroup, uploadParentFile, comboBoxGeneType));
 	return uploadParentFile;
     }
-
+    
     @SuppressWarnings("unused")
     private Component inbreedingOptionOptionGroupComponent(){
 	inBreedingOptionGroup = new OptionGroup("Inbreeding Option");
@@ -280,7 +282,8 @@ public class CrossFormComponent extends VerticalLayout{
 			if(crossFormHelper.checkEstimatesFileContentIfCompatible(comboBoxGeneType, uploadedEstimatesFile)){
 				Notification.show("Uploaded file: ", tmpParentFile,
 						Type.TRAY_NOTIFICATION);
-//				crossFormHelper.populateParentList(uploadedParentFile, listParents, buttonAdd);
+				buttonAdd.setEnabled(true);
+				crossFormHelper.populateParentList(uploadedParentFile, listParents);
 				estimateSourceOptionGroup.setItemCaption(1, "Specified: "+tmpEstimatesFile);
 			}
 			else{
@@ -291,9 +294,10 @@ public class CrossFormComponent extends VerticalLayout{
 			}
 		}
 	});
+	estimateSourceOptionGroup.addValueChangeListener(new OptionGroupValueChangeListener(estimateSourceOptionGroup, uploadEstimateSource, comboBoxGeneType));
+	uploadEstimateSource.setEnabled(false);
 	return uploadEstimateSource;
     }
-
 
     @SuppressWarnings("unused")
     private Component crossTypeOptionGroupComponent(){
@@ -325,7 +329,7 @@ public class CrossFormComponent extends VerticalLayout{
 		    checkBoxP3.setVisible(true);
 		    crossFormInputModel.setCrossType(contantValue.THREE_WAY_CROSSTYPE);
 		}
-	    }
+	   }
 	});
 	return crossTypeOptionGroup;
     }
@@ -423,6 +427,7 @@ public class CrossFormComponent extends VerticalLayout{
 		if(checkBoxP1.getValue()==true){
 		    crossFormHelper.setOtherParentCheckboxUnchecked(checkBoxP2,checkBoxP3);
 		}
+		else listParent1.setValue(null);
 	    }
 	});
 
@@ -434,6 +439,7 @@ public class CrossFormComponent extends VerticalLayout{
 		if(checkBoxP2.getValue()==true){
 		    crossFormHelper.setOtherParentCheckboxUnchecked(checkBoxP1,checkBoxP3);
 		}
+		else listParent2.setValue(null);
 	    }
 	});
 
@@ -445,6 +451,7 @@ public class CrossFormComponent extends VerticalLayout{
 		if(checkBoxP3.getValue()==true){
 		    crossFormHelper.setOtherParentCheckboxUnchecked(checkBoxP1,checkBoxP2);
 		}
+		else listParent3.setValue(null);
 	    }
 	});
 
